@@ -9,8 +9,8 @@ from openke.data import TrainDataLoader, TestDataLoader
 from utilities import read_new_init_embs
 
 
-new_entity_embs_path = './benchmarks/FB15K/new_init_entity_embedding_description5_id0_des50.txt'
-new_rel_embs_path = './benchmarks/FB15K/new_init_relation_embedding_description5_id0_des50.txt'
+new_entity_embs_path = './benchmarks/FB15K/new_init_entity_embedding_id0_des50.txt'
+new_rel_embs_path = './benchmarks/FB15K/new_init_relation_embedding_id0_des50.txt'
 
 print("entity_embs ",new_entity_embs_path)
 print("relation_embs ",new_rel_embs_path)
