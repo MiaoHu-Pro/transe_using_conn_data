@@ -6,17 +6,17 @@ from openke.module.model import TransE
 from openke.module.loss import MarginLoss
 from openke.module.strategy import NegativeSampling
 from openke.data import TrainDataLoader, TestDataLoader
-from utilities import read_new_init_embs
+from utilities import read_new_init_embs,read_transe_out_embs
+
+out_transE_entity_emb = './benchmarks/FB15K/out_transE_entity_embedding100.txt'
+out_transE_relation_emb = './benchmarks/FB15K/out_transE_relation_embedding100.txt'
+out_entity_embs, out_rel_embs = read_transe_out_embs(out_transE_entity_emb,out_transE_relation_emb)
 
 
 new_entity_embs_path = './benchmarks/FB15K/new_init_entity_embedding_id0_des50.txt'
 new_rel_embs_path = './benchmarks/FB15K/new_init_relation_embedding_id0_des50.txt'
-
 print("entity_embs ",new_entity_embs_path)
 print("relation_embs ",new_rel_embs_path)
-
-
-
 entity_embs, rel_embs = read_new_init_embs(new_entity_embs_path,new_rel_embs_path)
 
 print("entity_embs.shape ", entity_embs.shape)
@@ -37,6 +37,8 @@ train_dataloader = TrainDataLoader(
 	neg_rel = 0)
 
 train_dataloader.set_init_embeddings(entity_embs, rel_embs)
+train_dataloader.set_trains_out_embeddings(out_entity_embs, out_rel_embs)
+
 # dataloader for test
 test_dataloader = TestDataLoader("./benchmarks/FB15K/", "link")
 
@@ -46,6 +48,8 @@ transe = TransE(
 	rel_tot = train_dataloader.get_rel_tot(),
 	init_en_embed = train_dataloader.get_entity_embedding(),
 	init_rel_embed = train_dataloader.get_rel_embedding(),
+	per_out_ent_embed= train_dataloader.get_transe_out_entity_embedding(),
+	per_out_rel_embed = train_dataloader.get_transe_out_rel_embedding(),
 	dim =50, 
 	p_norm = 1, 
 	norm_flag = True)

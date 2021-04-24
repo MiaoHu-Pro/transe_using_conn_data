@@ -78,6 +78,10 @@ def read_init_embs(in_enti_path, in_rel_path):
 
     return np.array(ini_ent, dtype=np.float32), np.array(ini_rel, dtype=np.float32)
 
+
+
+
+
 def read_new_init_embs(in_enti_path, in_rel_path):
 
     print("read my word embedding input...")
@@ -339,20 +343,65 @@ def test():
     ave_out = [score for i in range(20)]
     print(ave_out)
 
+def read_transe_out_embs(out_ent_path,out_rel_path):
+
+    print("read TransE out embedding...")
+
+    entity_embedding = []
+    entity_id = []
+    with open(out_ent_path) as f:
+        for each_line in f:
+            each_line = each_line.strip()
+            if each_line:
+                each_line_list = each_line.split('\t')
+                entity_id.append(each_line_list[0])
+
+                entity_embedding.append(ast.literal_eval(each_line_list[1]))
+
+    re_entity = np.array(entity_embedding, dtype=np.float32)
+
+    relation_embedding = []
+    relation_id = []
+    with open(out_rel_path) as f:
+        for each_line in f:
+            each_line = each_line.strip()
+            if each_line:
+                each_line_list = each_line.split('\t')
+                relation_id.append(each_line_list[0])
+
+                relation_embedding.append(ast.literal_eval(each_line_list[1]))
+
+    re_relation = np.array(relation_embedding, dtype=np.float32)
+
+    # print(re_entity)
+    # print(re_entity.shape)
+    #
+    # print(re_relation)
+    # print(re_relation.shape)
+
+    return re_entity, re_relation
 
 if __name__ == "__main__":
 
+    out_transE_entity_emb = './benchmarks/FB15K/out_transE_entity_embedding100.txt'
+    out_transE_relation_emb = './benchmarks/FB15K/out_transE_relation_embedding100.txt'
+    read_transe_out_embs(out_transE_entity_emb, out_transE_relation_emb)
 
-    entity_embs_path = './data/FB15K/init_entity_embedding.txt'
-    rel_embs_path = './data/FB15K/init_relation_embedding.txt'
-    entity_embs, rel_embs = read_init_embs(entity_embs_path,rel_embs_path)
+
+
+    # entity_embs_path = './data/FB15K/init_entity_embedding.txt'
+    # rel_embs_path = './data/FB15K/init_relation_embedding.txt'
+    # entity_embs, rel_embs = read_init_embs(entity_embs_path,rel_embs_path)
+
+    # new_entity_embs_path = './data/FB15K/new_init_entity_embedding.txt'
+    # new_rel_embs_path = './data/FB15K/new_init_relation_embedding.txt'
     #
-    new_entity_embs_path = './data/FB15K/new_init_entity_embedding.txt'
-    new_rel_embs_path = './data/FB15K/new_init_relation_embedding.txt'
-
     # obtain init entity and relation embedding
-    np.savetxt(new_entity_embs_path,entity_embs,fmt='%f',delimiter=',')
-    np.savetxt(new_rel_embs_path,rel_embs,fmt='%f',delimiter=',')
+    # np.savetxt(new_entity_embs_path,entity_embs,fmt='%f',delimiter=',')
+    # np.savetxt(new_rel_embs_path,rel_embs,fmt='%f',delimiter=',')
+    #
+
+
 
     # init_entity_arr,init_rel_arr = read_new_init_embs(new_entity_embs_path,new_rel_embs_path)
     # print("init_entity_arr.shape",init_entity_arr.shape)
@@ -402,14 +451,12 @@ if __name__ == "__main__":
     # print(s)
     # print(type(train_id[s,0]))
 
-    entity2id_path = './data/FB15K/entity2id.txt'
-    entity2obj_path = './data/FB15K/entity2Obj.txt'
-
-    entity_id_symbol_label_description_path = './data/FB15K/entity_id_symbol_label_description.txt'
+    # entity2id_path = './data/FB15K/entity2id.txt'
+    # entity2obj_path = './data/FB15K/entity2Obj.txt'
+    # entity_id_symbol_label_description_path = './data/FB15K/entity_id_symbol_label_description.txt'
     # get entity2id_symbol_label_des ->  0	/m/027rn	Dominican Republic	country in the Caribbean
-    entity_id_symbol_label_description_set = entity_id_symbol_label_description(entity2id_path,entity2obj_path)
-
-    write_entity_id_symbol_label_description_set(entity_id_symbol_label_description_path,entity_id_symbol_label_description_set)
+    # entity_id_symbol_label_description_set = entity_id_symbol_label_description(entity2id_path,entity2obj_path)
+    # write_entity_id_symbol_label_description_set(entity_id_symbol_label_description_path,entity_id_symbol_label_description_set)
 
 
 

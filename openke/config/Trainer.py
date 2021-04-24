@@ -60,9 +60,7 @@ class Trainer(object):
 		if self.use_gpu:
 			
 			"""self.model.cuda()"""
-                        
 			self.model.to(device)
-
 
 		if self.optimizer != None:
 			pass
@@ -99,7 +97,7 @@ class Trainer(object):
 			for data in self.data_loader:
 				loss = self.train_one_step(data)
 				res += loss
-			training_range.set_description("Epoch %d | loss: %f" % (epoch, res))
+			training_range.set_description("Epoch %d | loss:%f \n" % (epoch, res))
 			
 			if self.save_steps and self.checkpoint_dir and (epoch + 1) % self.save_steps == 0:
 				print("Epoch %d has finished, saving..." % (epoch))

@@ -5,7 +5,7 @@ from .Model import Model
 
 class TransE(Model):
 
-	def __init__(self, ent_tot, rel_tot, init_en_embed,init_rel_embed ,dim, p_norm = 1,norm_flag = True, margin = None, epsilon = None):
+	def __init__(self, ent_tot, rel_tot, init_en_embed, init_rel_embed, per_out_ent_embed, per_out_rel_embed, dim, p_norm = 1, norm_flag = True, margin = None, epsilon = None):
 		super(TransE, self).__init__(ent_tot, rel_tot)
 		
 		self.dim = dim
@@ -15,13 +15,16 @@ class TransE(Model):
 		self.p_norm = p_norm
 		# self.config = config
 
+		self.pre_out_ent_embeddings = per_out_ent_embed
+		self.pre_out_rel_embeddings = per_out_rel_embed
+
 		self.ent_embeddings = nn.Embedding(self.ent_tot, self.dim)
 		self.rel_embeddings = nn.Embedding(self.rel_tot, self.dim)
-
 
 		if margin == None or epsilon == None:
 
 			print("\n load my data....\n")
+			print("\n pre_out_ent_embeddings \n",self.pre_out_ent_embeddings.shape)
 			print("\n self.dim: ",self.dim)
 
 			self.ent_embeddings.weight.data = init_en_embed   # give value init_ent_embs comes from init_entity_embedding.txt
@@ -29,9 +32,6 @@ class TransE(Model):
 		else:
 			nn.init.xavier_uniform_(self.ent_embeddings.weight.data)
 			nn.init.xavier_uniform_(self.rel_embeddings.weight.data)
-
-
-
 
 
 
@@ -85,9 +85,28 @@ class TransE(Model):
 		batch_t = data['batch_t']
 		batch_r = data['batch_r']
 		mode = data['mode']
-		h = self.ent_embeddings(batch_h)
-		t = self.ent_embeddings(batch_t)
-		r = self.rel_embeddings(batch_r)
+		h_des = self.ent_embeddings(batch_h)
+		t_des = self.ent_embeddings(batch_t)
+		r_des = self.rel_embeddings(batch_r)
+
+		# print("h_des.shape",h_des.shape)
+
+		h_s = self.pre_out_ent_embeddings[batch_h]
+		t_s = self.pre_out_ent_embeddings[batch_t]
+		r_s = self.pre_out_rel_embeddings[batch_r]
+
+		# print("h_s.shape",h_s.shape)
+
+		h = torch.cat([h_s,h_des], dim=-1)
+		t = torch.cat([t_s,t_des], dim=-1)
+		r = torch.cat([r_s,r_des], dim=-1)
+
+		# print("h.shape",h.shape)
+
+		# print("self.ent_embeddings.weight.data[0]",self.ent_embeddings.weight.data[0])
+		# print("self.pre_out_ent_embeddings[0]",self.pre_out_ent_embeddings[0])
+
+		# print("==================\n")
 		score = self._calc(h ,t, r, mode)
 		if self.margin_flag:
 			return self.margin - score

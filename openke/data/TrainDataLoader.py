@@ -216,11 +216,27 @@ class TrainDataLoader(object):
 		self.init_ent_embs = torch.from_numpy(entity_embs).to(device)  # 初始化的entity embedding
 		self.init_rel_embs = torch.from_numpy(rel_embs).to(device)     # 初始化的relation embedding
 
+
+	def set_trains_out_embeddings(self,out_entity_embs, out_rel_embs):
+
+		self.use_init_embeddings = True
+		self.trase_out_ent_embs = torch.from_numpy(out_entity_embs).to(device)  # 初始化的entity embedding
+		self.trase_out_rel_embs = torch.from_numpy(out_rel_embs).to(device)     # 初始化的relation embedding
+
 	def get_entity_embedding(self):
 		return self.init_ent_embs
 
 	def get_rel_embedding(self):
 		return self.init_rel_embs
+
+	def get_transe_out_entity_embedding(self):
+		return self.trase_out_ent_embs
+
+	def get_transe_out_rel_embedding(self):
+		return self.trase_out_rel_embs
+
+
+
 
 	def set_work_threads(self, work_threads):
 		self.work_threads = work_threads
