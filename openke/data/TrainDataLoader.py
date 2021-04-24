@@ -1,7 +1,35 @@
 # coding:utf-8
+import torch
+import torch.nn as nn
+from torch.autograd import Variable
+import torch.optim as optim
 import os
+import time
+import sys
+import datetime
+import random
 import ctypes
+import json
 import numpy as np
+from tqdm import tqdm
+
+use_gpu=False
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+if torch.cuda.is_available():
+    use_gpu=True
+
+
+class MyDataParallel(nn.DataParallel):
+    def _getattr__(self, name):
+        return getattr(self.module, name)
+
+
+def to_var(x):
+    return Variable(torch.from_numpy(x).to(device))
+
+
 
 class TrainDataSampler(object):
 
@@ -100,6 +128,7 @@ class TrainDataLoader(object):
 		self.batch_t = np.zeros(self.batch_seq_size, dtype=np.int64)
 		self.batch_r = np.zeros(self.batch_seq_size, dtype=np.int64)
 		self.batch_y = np.zeros(self.batch_seq_size, dtype=np.float32)
+
 		self.batch_h_addr = self.batch_h.__array_interface__["data"][0]
 		self.batch_t_addr = self.batch_t.__array_interface__["data"][0]
 		self.batch_r_addr = self.batch_r.__array_interface__["data"][0]
@@ -179,6 +208,19 @@ class TrainDataLoader(object):
 			return self.sampling_tail()
 
 	"""interfaces to set essential parameters"""
+
+	def set_init_embeddings(self, entity_embs, rel_embs):
+
+		self.use_init_embeddings = True
+
+		self.init_ent_embs = torch.from_numpy(entity_embs).to(device)  # 初始化的entity embedding
+		self.init_rel_embs = torch.from_numpy(rel_embs).to(device)     # 初始化的relation embedding
+
+	def get_entity_embedding(self):
+		return self.init_ent_embs
+
+	def get_rel_embedding(self):
+		return self.init_rel_embs
 
 	def set_work_threads(self, work_threads):
 		self.work_threads = work_threads
