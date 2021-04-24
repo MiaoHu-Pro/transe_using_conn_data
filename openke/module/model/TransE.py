@@ -5,7 +5,7 @@ from .Model import Model
 
 class TransE(Model):
 
-	def __init__(self, ent_tot, rel_tot, dim = 100, p_norm = 1, norm_flag = True, margin = None, epsilon = None):
+	def __init__(self, ent_tot, rel_tot, init_en_embed,init_rel_embed ,dim, p_norm = 1,norm_flag = True, margin = None, epsilon = None):
 		super(TransE, self).__init__(ent_tot, rel_tot)
 		
 		self.dim = dim
@@ -13,27 +13,48 @@ class TransE(Model):
 		self.epsilon = epsilon
 		self.norm_flag = norm_flag
 		self.p_norm = p_norm
+		# self.config = config
 
 		self.ent_embeddings = nn.Embedding(self.ent_tot, self.dim)
 		self.rel_embeddings = nn.Embedding(self.rel_tot, self.dim)
 
+
 		if margin == None or epsilon == None:
+
+			print("\n load my data....\n")
+			print("\n self.dim: ",self.dim)
+
+			self.ent_embeddings.weight.data = init_en_embed   # give value init_ent_embs comes from init_entity_embedding.txt
+			self.rel_embeddings.weight.data = init_rel_embed   # give value
+		else:
 			nn.init.xavier_uniform_(self.ent_embeddings.weight.data)
 			nn.init.xavier_uniform_(self.rel_embeddings.weight.data)
-		else:
-			self.embedding_range = nn.Parameter(
-				torch.Tensor([(self.margin + self.epsilon) / self.dim]), requires_grad=False
-			)
-			nn.init.uniform_(
-				tensor = self.ent_embeddings.weight.data, 
-				a = -self.embedding_range.item(), 
-				b = self.embedding_range.item()
-			)
-			nn.init.uniform_(
-				tensor = self.rel_embeddings.weight.data, 
-				a= -self.embedding_range.item(), 
-				b= self.embedding_range.item()
-			)
+
+
+
+
+
+
+		# if margin == None or epsilon == None:
+		# 	nn.init.xavier_uniform_(self.ent_embeddings.weight.data)
+		# 	nn.init.xavier_uniform_(self.rel_embeddings.weight.data)
+		# else:
+		#
+		# 	self.embedding_range = nn.Parameter(
+		# 		torch.Tensor([(self.margin + self.epsilon) / self.dim]), requires_grad=False
+		# 	)
+		# 	nn.init.uniform_(
+		# 		tensor = self.ent_embeddings.weight.data,
+		# 		a = -self.embedding_range.item(),
+		# 		b = self.embedding_range.item()
+		# 	)
+		# 	nn.init.uniform_(
+		# 		tensor = self.rel_embeddings.weight.data,
+		# 		a= -self.embedding_range.item(),
+		# 		b= self.embedding_range.item()
+		# 	)
+
+
 
 		if margin != None:
 			self.margin = nn.Parameter(torch.Tensor([margin]))
