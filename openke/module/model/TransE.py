@@ -15,8 +15,8 @@ class TransE(Model):
 		self.p_norm = p_norm
 		# self.config = config
 
-		self.pre_out_ent_embeddings = per_out_ent_embed
-		self.pre_out_rel_embeddings = per_out_rel_embed
+		self.pre_out_ent_embeddings = nn.Embedding(14951,100)
+		self.pre_out_rel_embeddings = nn.Embedding(1345,100)
 
 		self.ent_embeddings = nn.Embedding(self.ent_tot, self.dim)
 		self.rel_embeddings = nn.Embedding(self.rel_tot, self.dim)
@@ -24,11 +24,18 @@ class TransE(Model):
 		if margin == None or epsilon == None:
 
 			print("\n load my data....\n")
-			print("\n pre_out_ent_embeddings \n",self.pre_out_ent_embeddings.shape)
-			print("\n self.dim: ",self.dim)
+
+			print("\n self.ent_embeddings: ",self.dim)
 
 			self.ent_embeddings.weight.data = init_en_embed   # give value init_ent_embs comes from init_entity_embedding.txt
 			self.rel_embeddings.weight.data = init_rel_embed   # give value
+
+			print("\n load pre-out embeddings....\n")
+
+			self.pre_out_ent_embeddings.weight.data = per_out_ent_embed
+			self.pre_out_rel_embeddings.weight.data = per_out_rel_embed
+			print("\n per_out_rel_embed \n",per_out_rel_embed.shape)
+
 		else:
 			nn.init.xavier_uniform_(self.ent_embeddings.weight.data)
 			nn.init.xavier_uniform_(self.rel_embeddings.weight.data)
@@ -53,8 +60,6 @@ class TransE(Model):
 		# 		a= -self.embedding_range.item(),
 		# 		b= self.embedding_range.item()
 		# 	)
-
-
 
 		if margin != None:
 			self.margin = nn.Parameter(torch.Tensor([margin]))
@@ -89,24 +94,31 @@ class TransE(Model):
 		t_des = self.ent_embeddings(batch_t)
 		r_des = self.rel_embeddings(batch_r)
 
+		# print(h_des)
 		# print("h_des.shape",h_des.shape)
 
-		h_s = self.pre_out_ent_embeddings[batch_h]
-		t_s = self.pre_out_ent_embeddings[batch_t]
-		r_s = self.pre_out_rel_embeddings[batch_r]
-
+		h_s = self.pre_out_ent_embeddings(batch_h)
+		t_s = self.pre_out_ent_embeddings(batch_t)
+		r_s = self.pre_out_rel_embeddings(batch_r)
+		# print(h_s)
 		# print("h_s.shape",h_s.shape)
 
+		# connection
 		h = torch.cat([h_s,h_des], dim=-1)
 		t = torch.cat([t_s,t_des], dim=-1)
 		r = torch.cat([r_s,r_des], dim=-1)
 
-		# print("h.shape",h.shape)
+		# add
+		# h = torch.add(h_s,h_des)
+		# t = torch.add(t_s,t_des)
+		# r = torch.add(r_s,r_des)
+		# print(h)
+		print("h.shape",h.shape)
 
 		# print("self.ent_embeddings.weight.data[0]",self.ent_embeddings.weight.data[0])
 		# print("self.pre_out_ent_embeddings[0]",self.pre_out_ent_embeddings[0])
 
-		# print("==================\n")
+		print("==================\n")
 		score = self._calc(h ,t, r, mode)
 		if self.margin_flag:
 			return self.margin - score
