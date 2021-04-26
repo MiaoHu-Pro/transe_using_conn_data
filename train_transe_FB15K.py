@@ -14,8 +14,13 @@ out_entity_embs, out_rel_embs = read_transe_out_embs(out_transE_entity_emb,out_t
 print("out_transE_entity_emb ",out_transE_entity_emb)
 print("out_transE_relation_emb ",out_transE_relation_emb)
 
+<<<<<<< HEAD
 new_entity_embs_path = './benchmarks/FB15K/new_init_entity_embedding_id0_des300.txt'
 new_rel_embs_path = './benchmarks/FB15K/new_init_relation_embedding_id0_des300.txt'
+=======
+new_entity_embs_path = './benchmarks/FB15K/new_init_entity_embedding_id0_des100.txt'
+new_rel_embs_path = './benchmarks/FB15K/new_init_relation_embedding_id0_des100.txt'
+>>>>>>> 0634589e458a4a25531d075c2e614a5ef192b1ad
 print("entity_embs ",new_entity_embs_path)
 print("relation_embs ",new_rel_embs_path)
 

@@ -114,6 +114,7 @@ class TransE(Model):
 		# h = torch.add(h_s,h_des)
 		# t = torch.add(t_s,t_des)
 		# r = torch.add(r_s,r_des)
+		
 		# print(h)
 		# print("h.shape",h.shape)
 
