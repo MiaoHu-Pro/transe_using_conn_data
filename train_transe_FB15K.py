@@ -8,15 +8,17 @@ from openke.module.strategy import NegativeSampling
 from openke.data import TrainDataLoader, TestDataLoader
 from utilities import read_new_init_embs,read_transe_out_embs
 
-out_transE_entity_emb = './benchmarks/FB15K/out_transE_entity_embedding100.txt'
-out_transE_relation_emb = './benchmarks/FB15K/out_transE_relation_embedding100.txt'
+out_transE_entity_emb = './benchmarks/FB15K/out_transE_entity_embedding50.txt'
+out_transE_relation_emb = './benchmarks/FB15K/out_transE_relation_embedding50.txt'
 out_entity_embs, out_rel_embs = read_transe_out_embs(out_transE_entity_emb,out_transE_relation_emb)
+print("out_transE_entity_emb ",out_transE_entity_emb)
+print("out_transE_relation_emb ",out_transE_relation_emb)
 
-
-new_entity_embs_path = './benchmarks/FB15K/new_init_entity_embedding_id0_des50.txt'
-new_rel_embs_path = './benchmarks/FB15K/new_init_relation_embedding_id0_des50.txt'
+new_entity_embs_path = './benchmarks/FB15K/new_init_entity_embedding_id0_des300.txt'
+new_rel_embs_path = './benchmarks/FB15K/new_init_relation_embedding_id0_des300.txt'
 print("entity_embs ",new_entity_embs_path)
 print("relation_embs ",new_rel_embs_path)
+
 entity_embs, rel_embs = read_new_init_embs(new_entity_embs_path,new_rel_embs_path)
 
 print("entity_embs.shape ", entity_embs.shape)
@@ -50,7 +52,7 @@ transe = TransE(
 	init_rel_embed = train_dataloader.get_rel_embedding(),
 	per_out_ent_embed= train_dataloader.get_transe_out_entity_embedding(),
 	per_out_rel_embed = train_dataloader.get_transe_out_rel_embedding(),
-	dim =50, 
+	dim =350, 
 	p_norm = 1, 
 	norm_flag = True)
 
