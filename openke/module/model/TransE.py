@@ -24,13 +24,14 @@ class TransE(Model):
 		if margin == None or epsilon == None:
 
 			print("\nInit fun ....")
-
 			print("load my data....")
-
 			print("self.ent_embeddings: ",self.dim)
-
 			self.ent_embeddings.weight.data = init_en_embed   # give value init_ent_embs comes from init_entity_embedding.txt
 			self.rel_embeddings.weight.data = init_rel_embed   # give value
+
+			# print("load random data....")
+			# nn.init.xavier_uniform_(self.ent_embeddings.weight.data)
+			# nn.init.xavier_uniform_(self.rel_embeddings.weight.data)
 
 			print("load pre-out embeddings....")
 
@@ -118,10 +119,7 @@ class TransE(Model):
 		# print(h)
 		# print("h.shape",h.shape)
 
-		# print("self.ent_embeddings.weight.data[0]",self.ent_embeddings.weight.data[0])
-		# print("self.pre_out_ent_embeddings[0]",self.pre_out_ent_embeddings[0])
 
-		# print("==================\n")
 		score = self._calc(h ,t, r, mode)
 		if self.margin_flag:
 			return self.margin - score

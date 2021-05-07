@@ -1,0 +1,67 @@
+Thu Apr 29 13:43:26 2021       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 450.51.06    Driver Version: 450.51.06    CUDA Version: 11.0     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla V100-PCIE...  Off  | 00000000:12:00.0 Off |                    0 |
+| N/A   32C    P0    33W / 250W |      0MiB / 32510MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+the job stary 
+  0%|          | 0/832 [00:00<?, ?it/s]Input Files Path : ./benchmarks/FB15K/
+The toolkit is importing datasets.
+The total of relations is 1345.
+The total of entities is 14951.
+The total of train triples is 483142.
+Input Files Path : ./benchmarks/FB15K/
+The total of test triples is 832.
+The total of valid triples is 50000.
+  7%|▋         | 60/832 [00:00<00:01, 597.99it/s] 15%|█▍        | 124/832 [00:00<00:01, 609.27it/s] 23%|██▎       | 189/832 [00:00<00:01, 618.42it/s] 30%|███       | 253/832 [00:00<00:00, 624.07it/s] 38%|███▊      | 319/832 [00:00<00:00, 631.66it/s] 46%|████▌     | 384/832 [00:00<00:00, 635.42it/s] 54%|█████▍    | 450/832 [00:00<00:00, 640.69it/s] 62%|██████▏   | 514/832 [00:00<00:00, 638.66it/s] 69%|██████▉   | 578/832 [00:00<00:00, 638.19it/s] 77%|███████▋  | 644/832 [00:01<00:00, 642.17it/s] 85%|████████▍ | 707/832 [00:01<00:00, 633.53it/s] 93%|█████████▎| 772/832 [00:01<00:00, 636.43it/s]100%|██████████| 832/832 [00:01<00:00, 634.99it/s]
+  0%|          | 0/832 [00:00<?, ?it/s]no type constraint results:
+metric:			 MRR 		 MR 		 hit@10 	 hit@3  	 hit@1 
+l(raw):			 0.548095 	 126.246391 	 0.807692 	 0.651442 	 0.401442 
+r(raw):			 0.550678 	 98.385818 	 0.828125 	 0.665865 	 0.396635 
+averaged(raw):		 0.549386 	 112.316101 	 0.817909 	 0.658654 	 0.399038 
+
+l(filter):		 0.573136 	 125.983170 	 0.819712 	 0.673077 	 0.431490 
+r(filter):		 0.574992 	 98.116585 	 0.830529 	 0.692308 	 0.420673 
+averaged(filter):	 0.574064 	 112.049881 	 0.825120 	 0.682692 	 0.426082 
+0.825120
+  0%|          | 1/832 [00:00<00:02, 399.23it/s]
+read TransE out embedding...
+out_transE_entity_emb  ./benchmarks/FB15K/out_transE_entity_embedding100.txt
+out_transE_relation_emb  ./benchmarks/FB15K/out_transE_relation_embedding100.txt
+entity_embs  ./benchmarks/FB15K/new_init_entity_embedding_id0_des50.txt
+relation_embs  ./benchmarks/FB15K/new_init_relation_embedding_id0_des50.txt
+read my word embedding input...
+entity_embs.shape  (14951, 50)
+rel_embs.shape  (1345, 50)
+
+Init fun ....
+load my data....
+self.ent_embeddings:  50
+load pre-out embeddings....
+per_out_rel_embed 
+ torch.Size([1345, 100])
+trainer_run .... 
+
+tester_run .... 
+
+test 1-1: 
+
+0.825120210647583
+Triples Classification: 
+Accuracy:  0.9140625
+Thread:  7.879166603088379
+the job end 

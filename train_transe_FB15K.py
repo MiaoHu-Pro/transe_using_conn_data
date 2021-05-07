@@ -8,19 +8,14 @@ from openke.module.strategy import NegativeSampling
 from openke.data import TrainDataLoader, TestDataLoader
 from utilities import read_new_init_embs,read_transe_out_embs
 
-out_transE_entity_emb = './benchmarks/FB15K/out_transE_entity_embedding50.txt'
-out_transE_relation_emb = './benchmarks/FB15K/out_transE_relation_embedding50.txt'
+out_transE_entity_emb = './benchmarks/FB15K/out_transE_entity_embedding100.txt'
+out_transE_relation_emb = './benchmarks/FB15K/out_transE_relation_embedding100.txt'
 out_entity_embs, out_rel_embs = read_transe_out_embs(out_transE_entity_emb,out_transE_relation_emb)
 print("out_transE_entity_emb ",out_transE_entity_emb)
 print("out_transE_relation_emb ",out_transE_relation_emb)
 
-<<<<<<< HEAD
-new_entity_embs_path = './benchmarks/FB15K/new_init_entity_embedding_id0_des300.txt'
-new_rel_embs_path = './benchmarks/FB15K/new_init_relation_embedding_id0_des300.txt'
-=======
 new_entity_embs_path = './benchmarks/FB15K/new_init_entity_embedding_id0_des100.txt'
 new_rel_embs_path = './benchmarks/FB15K/new_init_relation_embedding_id0_des100.txt'
->>>>>>> 0634589e458a4a25531d075c2e614a5ef192b1ad
 print("entity_embs ",new_entity_embs_path)
 print("relation_embs ",new_rel_embs_path)
 
@@ -57,7 +52,7 @@ transe = TransE(
 	init_rel_embed = train_dataloader.get_rel_embedding(),
 	per_out_ent_embed= train_dataloader.get_transe_out_entity_embedding(),
 	per_out_rel_embed = train_dataloader.get_transe_out_rel_embedding(),
-	dim =350, 
+	dim =100, 
 	p_norm = 1, 
 	norm_flag = True)
 
@@ -70,7 +65,7 @@ model = NegativeSampling(
 )
 
 # train the model
-trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 20000, alpha = 1.0 , use_gpu = True)
+trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 20000, alpha = 0.001 , use_gpu = True)
 
 time.sleep(1)
 
@@ -78,10 +73,22 @@ time.sleep(1)
 print("trainer_run .... " + '\n')
 
 trainer.run()
-transe.save_checkpoint('./checkpoint/transe.ckpt')
+transe.save_checkpoint('./checkpoint/transe_100_100.ckpt')
 
 # test the model
 print("tester_run .... " + '\n')
-transe.load_checkpoint('./checkpoint/transe.ckpt')
+# print("test N-1: \n")
+transe.load_checkpoint('./checkpoint/transe_100_100.ckpt')
 tester = Tester(model = transe, data_loader = test_dataloader, use_gpu = True)
-tester.run_link_prediction(type_constrain = False)
+tester.run_link_prediction(type_constrain = False) 
+
+acc, thread = tester.run_triple_classification()
+
+print("Triples Classification: ")
+print("Accuracy: ", acc)
+print("Thread: ", thread)
+
+
+
+
+

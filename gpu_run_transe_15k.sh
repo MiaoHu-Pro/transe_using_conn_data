@@ -2,7 +2,7 @@
 #SBATCH --job-name=run_transe
 #SBATCH -p gpu
 #SBATCH --time=48:00:00
-#SBATCH --output=transe_FB15K_id50_des300_all_change_20000_gama_1_gpu_out-%j.out
+#SBATCH --output=transe_FB15K_id100_des100_all_change_triple_classification_20000_gama_0.001_gpu_out-%j.out
 #SBATCH --gres gpu:1
 #SBATCH --partition=k2-gpu
 
